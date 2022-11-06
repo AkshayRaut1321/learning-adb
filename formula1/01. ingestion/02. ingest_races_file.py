@@ -5,14 +5,14 @@
 
 # COMMAND ----------
 
-from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DateType
 
 race_schema = StructType(fields = [StructField("raceId", IntegerType(), False),
                                   StructField("year", IntegerType(), True),
                                   StructField("round", IntegerType(), True),
                                   StructField("circuitId", IntegerType(), True),
                                   StructField("name", StringType(), True),
-                                  StructField("date", StringType(), True),
+                                  StructField("date", DateType(), True),
                                   StructField("time", StringType(), True),
                                   StructField("url", StringType(), True)
                                   ])
@@ -27,8 +27,7 @@ race_df.show()
 
 # COMMAND ----------
 
-race_selected_df = race_df.select("raceId", "year", "round", "circuitId", "name", "date", "time") \
-    .withColumnRenamed("raceId", "race_id") \
+race_selected_df = race_df.withColumnRenamed("raceId", "race_id") \
     .withColumnRenamed("year", "race_year") \
     .withColumnRenamed("circuitId", "circuit_id")
 
@@ -42,8 +41,16 @@ race_final_df = race_selected_df.withColumn("race_timestamp", to_timestamp(conca
 
 # COMMAND ----------
 
-race_final_df.write.mode('overwrite').parquet('/mnt/formula1dl10/processed/races')
+race_final_df.write.mode('overwrite').partitionBy('race_year').parquet('/mnt/formula1dl10/processed/races')
 
 # COMMAND ----------
 
 spark.read.parquet('/mnt/formula1dl10/processed/races').show()
+
+# COMMAND ----------
+
+spark.read.parquet('/mnt/formula1dl10/processed/races/race_year=1951').show()
+
+# COMMAND ----------
+
+spark.read.parquet('/mnt/formula1dl10/processed/races/').show()

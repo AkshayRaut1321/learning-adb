@@ -4,6 +4,7 @@
 
 # COMMAND ----------
 
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType
 circuits_schema = StructType(fields = [StructField("circuitsId", IntegerType(), False),
                                       StructField("circuitRef", StringType(), True),
                                       StructField("name", StringType(), True),
@@ -47,16 +48,27 @@ display(circuits_df)
 
 # COMMAND ----------
 
-
-
-# COMMAND ----------
-
 circuits_df.describe().show()
 
 # COMMAND ----------
 
-from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType
+#### Test selecting specific columns
+circuits_df.select("*", "circuitsId").show()
 
 # COMMAND ----------
 
+circuits_df.select("circuitsId", "circuitRef", "name", "location", "country", "lat", "lng", "alt").show()
 
+# COMMAND ----------
+
+circuits_df.select(circuits_df.circuitsId, circuits_df.circuitRef, circuits_df.name, circuits_df.location, circuits_df.country, circuits_df.lat, circuits_df.lng, circuits_df.alt).show()
+
+# COMMAND ----------
+
+circuits_df.select(circuits_df["circuitsId"], circuits_df["circuitRef"], circuits_df["name"], circuits_df["location"], circuits_df["country"], circuits_df["lat"], circuits_df["lng"], circuits_df["alt"]).show()
+
+# COMMAND ----------
+
+from pyspark.sql.functions import col
+
+circuits_df.select(col("circuitsId").alias("circuits_id"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt")).show()

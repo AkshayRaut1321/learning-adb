@@ -1,10 +1,33 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC ### 1 - Import the file into a DataFrame
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC #### Step 1 - Verify that your blob containers are currently not mounted.
+
+# COMMAND ----------
+
 # MAGIC %fs
-# MAGIC ls dbfs:/mnt/formula1dl10/raw/
+# MAGIC ls dbfs:/
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC #### Step 2 - Import data types for creating a schema
 
 # COMMAND ----------
 
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DoubleType
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC #### Step 3 - Create a schema for your requirement by using imported types
+
+# COMMAND ----------
+
 circuits_schema = StructType(fields = [StructField("circuitsId", IntegerType(), False),
                                       StructField("circuitRef", StringType(), True),
                                       StructField("name", StringType(), True),
@@ -14,6 +37,11 @@ circuits_schema = StructType(fields = [StructField("circuitsId", IntegerType(), 
                                       StructField("lng", DoubleType(), True),
                                       StructField("alt", IntegerType(), True),
                                       StructField("url", StringType(), True)])
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC #### Step 4 - Read the CSV file by specifying header option and your custom schema
 
 # COMMAND ----------
 
@@ -30,7 +58,17 @@ circuits_df = spark.read \
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC #### Step 5 - Verify the data type of your DataFrame object
+
+# COMMAND ----------
+
 type(circuits_df)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC #### Step 6 - Verify the schema of your DataFrame object.
 
 # COMMAND ----------
 
@@ -43,12 +81,28 @@ circuits_df.printSchema()
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC #### Step 7 - Display the data of your DataFrame object.
+
+# COMMAND ----------
+
 # circuits_df.show()
 display(circuits_df)
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC #### Step 8 - Get the summary of your data.
+
+# COMMAND ----------
+
 circuits_df.describe().show()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC #### 5 different ways of reading column specific data.
+# MAGIC ##### 5.1) reading using literal string columns.
 
 # COMMAND ----------
 
@@ -62,13 +116,30 @@ circuits_df.select("circuitsId", "circuitRef", "name", "location", "country", "l
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC #### 5.2) reading using each column as a property of the DataFrame object.
+
+# COMMAND ----------
+
 ### Method 2:
 circuits_df.select(circuits_df.circuitsId, circuits_df.circuitRef, circuits_df.name, circuits_df.location, circuits_df.country, circuits_df.lat, circuits_df.lng, circuits_df.alt).show()
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC 
+# MAGIC #### 5.3) reading using each column as a key value property of the DataFrame object.
+
+# COMMAND ----------
+
 ### Method 3:
 circuits_df.select(circuits_df["circuitsId"], circuits_df["circuitRef"], circuits_df["name"], circuits_df["location"], circuits_df["country"], circuits_df["lat"], circuits_df["lng"], circuits_df["alt"]).show()
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC 
+# MAGIC #### 5.4) reading by importing and using col function that gives us a rename/alias functionality.
 
 # COMMAND ----------
 
@@ -80,7 +151,14 @@ circuits_df.select(col("circuitsId").alias("circuits_id"), col("circuitRef"), co
 
 # COMMAND ----------
 
+# - Method 4:
 circuits_selected_df = circuits_df.select(col("circuitsId"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt"))
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC 
+# MAGIC #### 5.5) reading by using withColumnRenamed function of the DataFrame object.
 
 # COMMAND ----------
 
@@ -97,17 +175,23 @@ circuits_renamed_df = circuits_selected_df.withColumnRenamed("circuitsId", "circ
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC 
+# MAGIC #### Step 9 - Verify that columns are renamed in the output.
+
+# COMMAND ----------
+
 circuits_renamed_df.show()
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC # Add new column using DataFrame.withColumn(<column_name>, column_object) function
+# MAGIC #### Step 10 - Add new column using DataFrame.withColumn(<column_name>, column_object) function
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Add new column by passing a column object
+# MAGIC #### 10.1) - Add new column by passing a readymade function that returns a column object with.
 
 # COMMAND ----------
 
@@ -118,7 +202,7 @@ circuits_renamed_df.withColumn("ingestion_date", current_timestamp()).show()
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## Add new column by passing a literal value
+# MAGIC #### 10.2) - Add new column by passing a literal value to a function that returns a column object.
 
 # COMMAND ----------
 
@@ -133,3 +217,31 @@ circuits_final_df = circuits_renamed_df.withColumn("ingestion_date", current_tim
 # COMMAND ----------
 
 display(circuits_final_df)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC 
+# MAGIC ### 2 - Writing to a Parquet file using DataFrame Writer API
+
+# COMMAND ----------
+
+circuits_final_df.write.mode("overwrite").parquet('/mnt/formula1dl10/processed/circuits')
+
+# COMMAND ----------
+
+# MAGIC %fs
+# MAGIC ls /mnt/formula1dl10/processed/circuits
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### 3 - Reading from a Parquet file
+
+# COMMAND ----------
+
+parquet_df = spark.read.parquet('/mnt/formula1dl10/processed/circuits')
+
+# COMMAND ----------
+
+display(parquet_df)

@@ -1,4 +1,13 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC #### Step 1 - initialize
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/initialization"
+
+# COMMAND ----------
+
 # MAGIC %fs
 # MAGIC 
 # MAGIC ls /mnt/formula1dl10/raw/
@@ -19,7 +28,7 @@ race_schema = StructType(fields = [StructField("raceId", IntegerType(), False),
 
 # COMMAND ----------
 
-race_df = spark.read.option("header", True).schema(race_schema).csv('/mnt/formula1dl10/raw/races.csv')
+race_df = spark.read.option("header", True).schema(race_schema).csv(f'{source_path}/races.csv')
 
 # COMMAND ----------
 
@@ -35,18 +44,19 @@ race_selected_df = race_df.withColumnRenamed("raceId", "race_id") \
 
 from pyspark.sql.functions import to_timestamp, col, concat, lit, current_timestamp
 
-race_final_df = race_selected_df.withColumn("race_timestamp", to_timestamp(concat(col("date"), lit(' '), col("time")), 'yyyy-MM-dd HH:mm:ss')) \
-    .withColumn("ingestion_date", current_timestamp()) \
+race_combined_time_df = race_selected_df.withColumn("race_timestamp", to_timestamp(concat(col("date"), lit(' '), col("time")), 'yyyy-MM-dd HH:mm:ss'))
+
+race_final_df = addIngestionDateColumn(race_combined_time_df)
     .select("race_id", "race_year", "round", "circuit_id", "name", "race_timestamp", "ingestion_date")
 
 # COMMAND ----------
 
-race_final_df.write.mode('overwrite').partitionBy('race_year').parquet('/mnt/formula1dl10/processed/races')
+race_final_df.write.mode('overwrite').partitionBy('race_year').parquet(f'{destination_path}/races')
 
 # COMMAND ----------
 
-spark.read.parquet('/mnt/formula1dl10/processed/races').show()
+spark.read.parquet(f'{destination_path}/races').show()
 
 # COMMAND ----------
 
-spark.read.parquet('/mnt/formula1dl10/processed/races/race_year=1951').show()
+spark.read.parquet(f'{destination_path}/races/race_year=1951').show()

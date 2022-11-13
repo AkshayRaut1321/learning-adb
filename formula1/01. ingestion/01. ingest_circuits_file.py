@@ -5,6 +5,15 @@
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC #### Step 1 - initialize
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/initialization"
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC #### Step 1 - Import data types for creating a schema
 
 # COMMAND ----------
@@ -44,7 +53,7 @@ circuits_schema = StructType(fields = [StructField("circuitsId", IntegerType(), 
 circuits_df = spark.read \
     .option("header", True) \
     .schema(circuits_schema) \
-    .csv('dbfs:/mnt/formula1dl10/raw/circuits.csv')
+    .csv('dbfs:'f'{source_path}/circuits.csv')
 
 # COMMAND ----------
 
@@ -189,7 +198,7 @@ circuits_renamed_df.show()
 # We will be creating a column using current_timestamp() function:
 from pyspark.sql.functions import current_timestamp
 
-circuits_final_df = circuits_renamed_df.withColumn("ingestion_date", current_timestamp())
+circuits_final_df = addIngestionDateColumn(circuits_renamed_df)
 
 # COMMAND ----------
 
@@ -203,7 +212,7 @@ display(circuits_final_df)
 
 # COMMAND ----------
 
-circuits_final_df.write.mode("overwrite").parquet('/mnt/formula1dl10/processed/circuits')
+circuits_final_df.write.mode("overwrite").parquet(f'{destination_path}/circuits')
 
 # COMMAND ----------
 
@@ -219,7 +228,7 @@ ls /mnt/formula1dl10/processed/circuits
 
 # COMMAND ----------
 
-parquet_df = spark.read.parquet('/mnt/formula1dl10/processed/circuits')
+parquet_df = spark.read.parquet(f'{destination_path}/circuits')
 
 # COMMAND ----------
 

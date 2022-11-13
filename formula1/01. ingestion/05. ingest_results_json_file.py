@@ -1,5 +1,14 @@
 # Databricks notebook source
 # MAGIC %md
+# MAGIC #### Step 1 - initialize
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/initialization"
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ##### Step 1 - create schema using Struct for root and nested objects
 
 # COMMAND ----------
@@ -28,7 +37,7 @@ results_schema = StructType(fields = [StructField('resultId', IntegerType(), Fal
 
 # COMMAND ----------
 
-results_df = spark.read.schema(results_schema).json('/mnt/formula1dl10/raw/results.json')
+results_df = spark.read.schema(results_schema).json(f'{source_path}/results.json')
 
 # COMMAND ----------
 
@@ -46,13 +55,14 @@ results_renamed_df = results_concise_df.withColumnRenamed('resultId', 'result_id
         .withColumnRenamed('positionOrder', 'position_order') \
         .withColumnRenamed('fastestLap', 'fastest_lap') \
         .withColumnRenamed('fastestLapTime', 'fastest_lap_time') \
-        .withColumnRenamed('fastestLapSpeed', 'fastest_lap_speed') \
-        .withColumn('ingestion_date', current_timestamp())
+        .withColumnRenamed('fastestLapSpeed', 'fastest_lap_speed')
+
+results_final = addIngestionDateColumn(results_renamed_df)
 
 # COMMAND ----------
 
-results_renamed_df.write.mode('overwrite').partitionBy('race_id').parquet('/mnt/formula1dl10/processed/results')
+results_final.write.mode('overwrite').partitionBy('race_id').parquet(f'{destination_path}/results')
 
 # COMMAND ----------
 
-spark.read.parquet('/mnt/formula1dl10/processed/results/race_id=81').show()
+spark.read.parquet(f'{destination_path}/results/race_id=81').show()

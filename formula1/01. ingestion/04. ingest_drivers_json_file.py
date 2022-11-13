@@ -1,5 +1,14 @@
 # Databricks notebook source
 # MAGIC %md
+# MAGIC #### Step 1 - initialize
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/initialization"
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ##### Step 1 - create schema using Struct for root and nested objects
 
 # COMMAND ----------
@@ -23,7 +32,7 @@ drivers_schema = StructType(fields = [StructField("driverId", IntegerType(), Fal
 
 # COMMAND ----------
 
-drivers_df = spark.read.schema(drivers_schema).json('/mnt/formula1dl10/raw/drivers.json')
+drivers_df = spark.read.schema(drivers_schema).json(f'{source_path}/drivers.json')
 
 # COMMAND ----------
 
@@ -45,12 +54,13 @@ drivers_concise_df = drivers_df.drop('url')
 # COMMAND ----------
 
 # We are going ahead with replacing existing column.
-from pyspark.sql.functions import concat, col, lit, current_timestamp
+from pyspark.sql.functions import concat, col, lit
 
-drivers_final_df = drivers_concise_df.withColumn('name', concat(col('name.forename'), lit(' '), col('name.surname'))) \
+drivers_renamed_df = drivers_concise_df.withColumn('name', concat(col('name.forename'), lit(' '), col('name.surname'))) \
                                     .withColumnRenamed('driverId', 'driver_id') \
-                                    .withColumnRenamed('driverRef', 'driver_ref') \
-                                    .withColumn('ingestion_date', current_timestamp())
+                                    .withColumnRenamed('driverRef', 'driver_ref')
+
+drivers_final_df = addIngestionDateColumn(drivers_renamed_df)
 
 # COMMAND ----------
 
@@ -59,8 +69,8 @@ drivers_final_df = drivers_concise_df.withColumn('name', concat(col('name.forena
 
 # COMMAND ----------
 
-drivers_final_df.write.mode('overwrite').parquet('/mnt/formula1dl10/processed/drivers')
+drivers_final_df.write.mode('overwrite').parquet(f'{destination_path}/drivers')
 
 # COMMAND ----------
 
-spark.read.parquet('/mnt/formula1dl10/processed/drivers').show()
+spark.read.parquet(f'{destination_path}/drivers').show()

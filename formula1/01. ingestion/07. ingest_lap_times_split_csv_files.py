@@ -1,4 +1,13 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC #### Step 1 - initialize
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/initialization"
+
+# COMMAND ----------
+
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 
 lap_time_schema = StructType(fields = [StructField('race_id', IntegerType(), False),
@@ -22,16 +31,16 @@ lap_time_schema = StructType(fields = [StructField('race_id', IntegerType(), Fal
 # COMMAND ----------
 
 lap_time_df = spark.read.schema(lap_time_schema) \
-    .csv('/mnt/formula1dl10/raw/lap_times/')
+    .csv(f'{source_path}/lap_times/')
 
 # COMMAND ----------
 
 from pyspark.sql.functions import current_timestamp
 
-lap_time_df.withColumn('ingestion_date', current_timestamp()) \
+addIngestionDateColumn(lap_time_df) \
     .write.mode('overwrite') \
-    .parquet('/mnt/formula1dl10/processed/lap_times')
+    .parquet(f'{destination_path}/lap_times')
 
 # COMMAND ----------
 
-spark.read.parquet('/mnt/formula1dl10/processed/lap_times').show()
+spark.read.parquet(f'{destination_path}/lap_times').show()

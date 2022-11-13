@@ -1,4 +1,13 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC #### Step 1 - initialize
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/initialization"
+
+# COMMAND ----------
+
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 
 qualifying_schema = StructType(fields = [StructField('qualifyId', IntegerType(), False),
@@ -15,20 +24,19 @@ qualifying_schema = StructType(fields = [StructField('qualifyId', IntegerType(),
 
 qualifying_df = spark.read.schema(qualifying_schema) \
     .option('multiLine', True) \
-    .json('/mnt/formula1dl10/raw/qualifying/qualifying*.json')
+    .json(source_path + '/qualifying/qualifying*.json')
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
-
-qualifying_df.withColumnRenamed('qualifyId', 'qualify_id') \
+qualifying_final_df = qualifying_df.withColumnRenamed('qualifyId', 'qualify_id') \
     .withColumnRenamed('raceId', 'race_id') \
     .withColumnRenamed('driverId', 'driver_id') \
-    .withColumnRenamed('constructorId', 'constructor_id') \
-    .withColumn('ingestion_date', current_timestamp()) \
+    .withColumnRenamed('constructorId', 'constructor_id')
+
+addIngestionDateColumn(qualifying_final_df) \
     .write.mode('overwrite') \
-    .parquet('/mnt/formula1dl10/processed/qualifying')
+    .parquet(destination_path + '/qualifying')
 
 # COMMAND ----------
 
-spark.read.parquet('/mnt/formula1dl10/processed/qualifying').show()
+spark.read.parquet(destination_path + '/qualifying').show()

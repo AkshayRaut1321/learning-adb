@@ -1,4 +1,13 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC #### Step 1 - initialize
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/initialization"
+
+# COMMAND ----------
+
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 
 pit_stops_schema = StructType(fields = [StructField('raceId', IntegerType(), True),
@@ -15,20 +24,21 @@ pit_stops_schema = StructType(fields = [StructField('raceId', IntegerType(), Tru
 
 pit_stops_df = spark.read.schema(pit_stops_schema) \
     .option('multiLine', True) \
-    .json('/mnt/formula1dl10/raw/pit_stops.json')
+    .json(f'{source_path}/pit_stops.json')
 
 # COMMAND ----------
 
 from pyspark.sql.functions import current_timestamp
 
-pit_stops_final_df = pit_stops_df.withColumnRenamed('raceId', 'race_id') \
-            .withColumnRenamed('driverId', 'driver_id') \
-            .withColumn('ingestion_date', current_timestamp())
+pit_stops_renamed_df = pit_stops_df.withColumnRenamed('raceId', 'race_id') \
+            .withColumnRenamed('driverId', 'driver_id')
+
+pit_stops_final_df = addIngestionDateColumn(pit_stops_renamed_df)
 
 # COMMAND ----------
 
-pit_stops_final_df.write.mode('overwrite').parquet('/mnt/formula1dl10/processed/pit_stops')
+pit_stops_final_df.write.mode('overwrite').parquet(f'{destination_path}/pit_stops')
 
 # COMMAND ----------
 
-spark.read.parquet('/mnt/formula1dl10/processed/pit_stops').show()
+spark.read.parquet(f'{destination_path}/pit_stops').show()

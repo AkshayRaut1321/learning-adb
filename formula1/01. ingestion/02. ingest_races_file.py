@@ -50,7 +50,3 @@ spark.read.parquet('/mnt/formula1dl10/processed/races').show()
 # COMMAND ----------
 
 spark.read.parquet('/mnt/formula1dl10/processed/races/race_year=1951').show()
-
-# COMMAND ----------
-
-spark.read.parquet('/mnt/formula1dl10/processed/races/').show()

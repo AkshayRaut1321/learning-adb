@@ -5,17 +5,7 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC #### Step 1 - Verify that your blob containers are currently not mounted.
-
-# COMMAND ----------
-
-# MAGIC %fs
-# MAGIC ls dbfs:/
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC #### Step 2 - Import data types for creating a schema
+# MAGIC #### Step 1 - Import data types for creating a schema
 
 # COMMAND ----------
 
@@ -102,56 +92,44 @@ circuits_df.describe().show()
 
 # MAGIC %md
 # MAGIC #### 5 different ways of reading column specific data.
-# MAGIC ##### 5.1) reading using literal string columns.
 
 # COMMAND ----------
 
-#### Test selecting specific columns
-circuits_df.select("*", "circuitsId").show()
-
-# COMMAND ----------
-
-### Method 1:
-circuits_df.select("circuitsId", "circuitRef", "name", "location", "country", "lat", "lng", "alt").show()
+# MAGIC %md
+# MAGIC #### 5.1) reading using literal string columns.
+# MAGIC 
+# MAGIC ##### Test selecting specific columns
+# MAGIC E.g. 1) circuits_df.select("*", "circuitsId").show()
+# MAGIC 
+# MAGIC E.g. 2) circuits_df.select("circuitsId", "circuitRef", "name", "location", "country", "lat", "lng", "alt").show()
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC #### 5.2) reading using each column as a property of the DataFrame object.
-
-# COMMAND ----------
-
-### Method 2:
-circuits_df.select(circuits_df.circuitsId, circuits_df.circuitRef, circuits_df.name, circuits_df.location, circuits_df.country, circuits_df.lat, circuits_df.lng, circuits_df.alt).show()
+# MAGIC 
+# MAGIC circuits_df.select(circuits_df.circuitsId, circuits_df.circuitRef, circuits_df.name, circuits_df.location, circuits_df.country, circuits_df.lat, circuits_df.lng, circuits_df.alt).show()
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC 
 # MAGIC #### 5.3) reading using each column as a key value property of the DataFrame object.
-
-# COMMAND ----------
-
-### Method 3:
-circuits_df.select(circuits_df["circuitsId"], circuits_df["circuitRef"], circuits_df["name"], circuits_df["location"], circuits_df["country"], circuits_df["lat"], circuits_df["lng"], circuits_df["alt"]).show()
+# MAGIC 
+# MAGIC circuits_df.select(circuits_df["circuitsId"], circuits_df["circuitRef"], circuits_df["name"], circuits_df["location"], circuits_df["country"], circuits_df["lat"], circuits_df["lng"], circuits_df["alt"]).show()
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC 
 # MAGIC #### 5.4) reading by importing and using col function that gives us a rename/alias functionality.
-
-# COMMAND ----------
-
-### Method 4:
-
-from pyspark.sql.functions import col
-
-circuits_df.select(col("circuitsId").alias("circuits_id"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt")).show()
+# MAGIC 
+# MAGIC from pyspark.sql.functions import col
+# MAGIC 
+# MAGIC circuits_df.select(col("circuitsId").alias("circuits_id"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt")).show()
 
 # COMMAND ----------
 
 # - Method 4:
+from pyspark.sql.functions import col
 circuits_selected_df = circuits_df.select(col("circuitsId"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt"))
 
 # COMMAND ----------
@@ -191,26 +169,25 @@ circuits_renamed_df.show()
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC #### 10.1) - Add new column by passing a readymade function that returns a column object with.
-
-# COMMAND ----------
-
-from pyspark.sql.functions import current_timestamp
-
-circuits_renamed_df.withColumn("ingestion_date", current_timestamp()).show()
+# MAGIC ##### 10.1) - Add new column by passing a readymade function that returns a column object with.
+# MAGIC 
+# MAGIC from pyspark.sql.functions import current_timestamp
+# MAGIC 
+# MAGIC circuits_renamed_df.withColumn("ingestion_date", current_timestamp()).show()
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC #### 10.2) - Add new column by passing a literal value to a function that returns a column object.
+# MAGIC ##### 10.2) - Add new column by passing a literal value to a function that returns a column object.
+# MAGIC 
+# MAGIC from pyspark.sql.functions import lit
+# MAGIC 
+# MAGIC circuits_selected_df.withColumn("env", lit("Development")).show()
 
 # COMMAND ----------
 
-from pyspark.sql.functions import lit
-
-circuits_selected_df.withColumn("env", lit("Development")).show()
-
-# COMMAND ----------
+# We will be creating a column using current_timestamp() function:
+from pyspark.sql.functions import current_timestamp
 
 circuits_final_df = circuits_renamed_df.withColumn("ingestion_date", current_timestamp())
 
@@ -230,8 +207,10 @@ circuits_final_df.write.mode("overwrite").parquet('/mnt/formula1dl10/processed/c
 
 # COMMAND ----------
 
-# MAGIC %fs
-# MAGIC ls /mnt/formula1dl10/processed/circuits
+# Verify the parquet files are generated:
+
+%fs
+ls /mnt/formula1dl10/processed/circuits
 
 # COMMAND ----------
 

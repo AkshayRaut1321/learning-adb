@@ -1,9 +1,9 @@
 # Databricks notebook source
 storage_name = "formula1dl10"
-scope = "formula1-scope"
-client_id = dbutils.secrets.get(scope = scope, key = "databricks-app-client-id2")
+scope = "formul1a-scope"
+client_id = dbutils.secrets.get(scope = scope, key = "databricks-app-client-id")
 tenant_id = dbutils.secrets.get(scope = scope, key = "databricks-app-tenant-id")
-client_secret = dbutils.secrets.get(scope = scope, key = "databricks-app-client-secret2")
+client_secret = dbutils.secrets.get(scope = scope, key = "databricks-app-client-secret")
 
 # COMMAND ----------
 
@@ -23,8 +23,9 @@ def mount_dls(container_name):
 
 # COMMAND ----------
 
-# Unmount raw container
-dbutils.fs.unmount('/mnt/formula1dl10/raw')
+# MAGIC %md
+# MAGIC #### Unmount raw container (if any)
+# MAGIC dbutils.fs.unmount('/mnt/formula1dl10/raw')
 
 # COMMAND ----------
 
@@ -32,17 +33,18 @@ mount_dls("raw")
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC #### Check the mounted location
+# MAGIC 
 # MAGIC %fs
 # MAGIC ls dbfs:/mnt/formula1dl10/
 
 # COMMAND ----------
 
-dbutils.fs.unmount('/mnt/formula1dl10/processed')
-
-# COMMAND ----------
-
-# MAGIC %fs
-# MAGIC ls dbfs:/mnt/formula1dl10/
+# MAGIC %md
+# MAGIC #### Unmount processed container (if any)
+# MAGIC 
+# MAGIC dbutils.fs.unmount('/mnt/formula1dl10/processed')
 
 # COMMAND ----------
 
@@ -51,17 +53,8 @@ mount_dls("processed")
 
 # COMMAND ----------
 
-# MAGIC %fs
-# MAGIC ls dbfs:/mnt/formula1dl10/
-
-# COMMAND ----------
-
 display(dbutils.fs.mounts())
 
 # COMMAND ----------
 
 display(dbutils.fs.ls('/mnt/formula1dl10/raw'))
-
-# COMMAND ----------
-
-

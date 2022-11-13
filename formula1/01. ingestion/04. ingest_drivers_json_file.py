@@ -9,6 +9,16 @@
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC #### Step 2 - Take input parameters
+
+# COMMAND ----------
+
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get('p_data_source')
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ##### Step 1 - create schema using Struct for root and nested objects
 
 # COMMAND ----------
@@ -58,7 +68,8 @@ from pyspark.sql.functions import concat, col, lit
 
 drivers_renamed_df = drivers_concise_df.withColumn('name', concat(col('name.forename'), lit(' '), col('name.surname'))) \
                                     .withColumnRenamed('driverId', 'driver_id') \
-                                    .withColumnRenamed('driverRef', 'driver_ref')
+                                    .withColumnRenamed('driverRef', 'driver_ref') \
+                                    .withColumn('data_source', lit(v_data_source))
 
 drivers_final_df = addIngestionDateColumn(drivers_renamed_df)
 
@@ -74,3 +85,7 @@ drivers_final_df.write.mode('overwrite').parquet(f'{destination_path}/drivers')
 # COMMAND ----------
 
 spark.read.parquet(f'{destination_path}/drivers').show()
+
+# COMMAND ----------
+
+dbutils.notebook.exit("SUCCESS")

@@ -9,6 +9,16 @@
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC #### Step 2 - Take input parameters
+
+# COMMAND ----------
+
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get('p_data_source')
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ##### Step 1 - create schema using Struct for root and nested objects
 
 # COMMAND ----------
@@ -45,7 +55,7 @@ results_concise_df = results_df.drop('statusId')
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
+from pyspark.sql.functions import lit
 
 results_renamed_df = results_concise_df.withColumnRenamed('resultId', 'result_id') \
         .withColumnRenamed('raceId', 'race_id') \
@@ -55,7 +65,8 @@ results_renamed_df = results_concise_df.withColumnRenamed('resultId', 'result_id
         .withColumnRenamed('positionOrder', 'position_order') \
         .withColumnRenamed('fastestLap', 'fastest_lap') \
         .withColumnRenamed('fastestLapTime', 'fastest_lap_time') \
-        .withColumnRenamed('fastestLapSpeed', 'fastest_lap_speed')
+        .withColumnRenamed('fastestLapSpeed', 'fastest_lap_speed') \
+        .withColumn('data_source', lit(v_data_source))
 
 results_final = addIngestionDateColumn(results_renamed_df)
 
@@ -66,3 +77,7 @@ results_final.write.mode('overwrite').partitionBy('race_id').parquet(f'{destinat
 # COMMAND ----------
 
 spark.read.parquet(f'{destination_path}/results/race_id=81').show()
+
+# COMMAND ----------
+
+dbutils.notebook.exit("SUCCESS")

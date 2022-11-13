@@ -14,6 +14,16 @@
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC #### Step 2 - Take input parameters
+
+# COMMAND ----------
+
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get('p_data_source')
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC #### Step 1 - Import data types for creating a schema
 
 # COMMAND ----------
@@ -150,15 +160,17 @@ circuits_selected_df = circuits_df.select(col("circuitsId"), col("circuitRef"), 
 # COMMAND ----------
 
 ### Method 5:
+from pyspark.sql.functions import lit
 
 circuits_renamed_df = circuits_selected_df.withColumnRenamed("circuitsId", "circuits_id") \
-.withColumnRenamed("circuitRef", "circuit_ref") \
-.withColumnRenamed("name", "name") \
-.withColumnRenamed("location", "location") \
-.withColumnRenamed("country", "country") \
-.withColumnRenamed("lat", "latitude") \
-.withColumnRenamed("lng", "longitude") \
-.withColumnRenamed("alt", "altitude")
+    .withColumnRenamed("circuitRef", "circuit_ref") \
+    .withColumnRenamed("name", "name") \
+    .withColumnRenamed("location", "location") \
+    .withColumnRenamed("country", "country") \
+    .withColumnRenamed("lat", "latitude") \
+    .withColumnRenamed("lng", "longitude") \
+    .withColumnRenamed("alt", "altitude") \
+    .withColumn('data_source', lit(v_data_source))
 
 # COMMAND ----------
 
@@ -233,3 +245,7 @@ parquet_df = spark.read.parquet(f'{destination_path}/circuits')
 # COMMAND ----------
 
 display(parquet_df)
+
+# COMMAND ----------
+
+dbutils.notebook.exit("SUCCESS")

@@ -8,6 +8,16 @@
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC #### Step 2 - Take input parameters
+
+# COMMAND ----------
+
+dbutils.widgets.text("p_data_source", "")
+v_data_source = dbutils.widgets.get('p_data_source')
+
+# COMMAND ----------
+
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 
 lap_time_schema = StructType(fields = [StructField('race_id', IntegerType(), False),
@@ -35,12 +45,17 @@ lap_time_df = spark.read.schema(lap_time_schema) \
 
 # COMMAND ----------
 
-from pyspark.sql.functions import current_timestamp
+from pyspark.sql.functions import lit
 
 addIngestionDateColumn(lap_time_df) \
+    .withColumn('data_source', lit(v_data_source)) \
     .write.mode('overwrite') \
     .parquet(f'{destination_path}/lap_times')
 
 # COMMAND ----------
 
 spark.read.parquet(f'{destination_path}/lap_times').show()
+
+# COMMAND ----------
+
+dbutils.notebook.exit("SUCCESS")

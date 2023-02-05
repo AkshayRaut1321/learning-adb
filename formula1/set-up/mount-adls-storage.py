@@ -1,6 +1,5 @@
 # Databricks notebook source
-storage_name = "formula1dl10"
-scope = "formul1a-scope"
+scope = "formula1-scope"
 client_id = dbutils.secrets.get(scope = scope, key = "databricks-app-client-id")
 tenant_id = dbutils.secrets.get(scope = scope, key = "databricks-app-tenant-id")
 client_secret = dbutils.secrets.get(scope = scope, key = "databricks-app-client-secret")
@@ -57,4 +56,4 @@ display(dbutils.fs.mounts())
 
 # COMMAND ----------
 
-display(dbutils.fs.ls('/mnt/formula1dl10/raw'))
+display(dbutils.fs.ls(f'/mnt/{storage_name}/raw'))

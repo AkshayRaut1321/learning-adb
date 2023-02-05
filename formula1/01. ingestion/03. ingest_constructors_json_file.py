@@ -64,7 +64,7 @@ constructors_final_df.write.mode('overwrite').parquet(f'{destination_path}/const
 
 # MAGIC %fs
 # MAGIC 
-# MAGIC ls mnt/formula1dl10/processed/constructors
+# MAGIC ls mnt/formula1dlakshayraut/processed/constructors
 
 # COMMAND ----------
 

@@ -228,10 +228,9 @@ circuits_final_df.write.mode("overwrite").parquet(f'{destination_path}/circuits'
 
 # COMMAND ----------
 
-# Verify the parquet files are generated:
-
-%fs
-ls /mnt/formula1dl10/processed/circuits
+# MAGIC %fs
+# MAGIC 
+# MAGIC ls /mnt/formula1dlakshayraut/processed/
 
 # COMMAND ----------
 

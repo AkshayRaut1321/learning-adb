@@ -1,5 +1,10 @@
 # Databricks notebook source
 # MAGIC %md
+# MAGIC ### 1 - Ingest Races file
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC #### Step 1 - initialize
 
 # COMMAND ----------
@@ -20,7 +25,7 @@ v_data_source = dbutils.widgets.get('p_data_source')
 
 # MAGIC %fs
 # MAGIC 
-# MAGIC ls /mnt/formula1dl10/raw/
+# MAGIC ls /mnt/formula1dlakshayraut/raw/
 
 # COMMAND ----------
 

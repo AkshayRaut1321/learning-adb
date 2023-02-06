@@ -210,7 +210,7 @@ circuits_renamed_df.show()
 # We will be creating a column using current_timestamp() function:
 from pyspark.sql.functions import current_timestamp
 
-circuits_final_df = addIngestionDateColumn(circuits_renamed_df)
+circuits_final_df = addIngestionDateColumn(circuits_renamed_df, 'ingestion_date')
 
 # COMMAND ----------
 

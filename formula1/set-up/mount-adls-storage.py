@@ -1,4 +1,8 @@
 # Databricks notebook source
+# MAGIC %run "../includes/initialization"
+
+# COMMAND ----------
+
 scope = "formula1-scope"
 client_id = dbutils.secrets.get(scope = scope, key = "databricks-app-client-id")
 tenant_id = dbutils.secrets.get(scope = scope, key = "databricks-app-tenant-id")
@@ -57,3 +61,7 @@ display(dbutils.fs.mounts())
 # COMMAND ----------
 
 display(dbutils.fs.ls(f'/mnt/{storage_name}/raw'))
+
+# COMMAND ----------
+
+mount_dls("presentation")

@@ -80,3 +80,37 @@ races_and_circuits_missing_each_other_df = circuits_df.join(races_df, races_df.c
 # COMMAND ----------
 
 display(races_and_circuits_missing_each_other_df)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC 
+# MAGIC #### Semi/Left semi join
+
+# COMMAND ----------
+
+circuits_semi_df = circuits_df.join(races_df, races_df.circuit_id == circuits_df.circuits_id, "semi")
+
+# COMMAND ----------
+
+display(circuits_semi_df)
+
+# COMMAND ----------
+
+races_semi_df = races_df.join(circuits_df, races_df.circuit_id == circuits_df.circuits_id, "semi")
+
+# COMMAND ----------
+
+display(races_semi_df)
+
+# COMMAND ----------
+
+display(races_df.join(circuits_df, races_df.circuit_id == circuits_df.circuits_id, "anti"))
+
+# COMMAND ----------
+
+display(races_df.crossJoin(circuits_df))
+
+# COMMAND ----------
+
+display(races_df.count() * circuits_df.count())

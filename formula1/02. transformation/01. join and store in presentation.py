@@ -34,7 +34,7 @@ drivers_df = spark.read.parquet(f'{destination_path}/drivers') \
 results_df = spark.read.parquet(f'{destination_path}/results') \
     .withColumnRenamed('fastest_lap', 'fastest lap') \
     .withColumnRenamed('time', 'race time') \
-    .select('driver_id', 'constructor_id', 'race_id', 'grid', 'fastest lap', 'race time', 'points')
+    .select('driver_id', 'constructor_id', 'race_id', 'grid', 'fastest lap', 'race time', 'points', 'position')
 
 # COMMAND ----------
 
@@ -44,7 +44,7 @@ final_df = results_df.join(drivers_df, drivers_df.driver_id == results_df.driver
     .join(constructors_df, constructors_df.constructor_id == results_df.constructor_id, 'inner') \
     .join(races_df, races_df.race_id == results_df.race_id, 'inner') \
     .join(circuits_df, circuits_df.circuits_id == races_df.circuit_id, 'inner') \
-    .select('race_year', 'race_name', 'race_date', 'circuit_location', 'driver_name', 'driver_number', 'driver_nationality', 'team', 'grid', 'fastest lap', 'race time', 'points')
+    .select('race_year', 'race_name', 'race_date', 'circuit_location', 'driver_name', 'driver_number', 'driver_nationality', 'team', 'grid', 'fastest lap', 'race time', 'points', 'position')
 
 final_df = addIngestionDateColumn(final_df, 'creation_date')
 
@@ -52,7 +52,7 @@ final_df = addIngestionDateColumn(final_df, 'creation_date')
 
 #display(final_df.filter("race_year = 2020 and race_name = 'Abu Dhabi Grand Prix'").orderBy(final_df.points.desc()))
 
-final_df.write.mode('overwrite').parquet(f'{presentation_path}/race_2020')
+final_df.write.mode('overwrite').parquet(f'{presentation_path}/race_results')
 
 # COMMAND ----------
 

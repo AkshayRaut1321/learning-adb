@@ -47,7 +47,7 @@ lap_time_df = spark.read.schema(lap_time_schema) \
 
 from pyspark.sql.functions import lit
 
-addIngestionDateColumn(lap_time_df, 'ingestion_date')) \
+addIngestionDateColumn(lap_time_df, 'ingestion_date') \
     .withColumn('data_source', lit(v_data_source)) \
     .write.mode('overwrite') \
     .parquet(f'{destination_path}/lap_times')

@@ -49,7 +49,7 @@ constructors_renamed_df = constructors_concise_df.withColumnRenamed('constructor
     .withColumnRenamed('constructorRef', 'constructor_ref') \
     .withColumn('data_source', lit(v_data_source))
 
-constructors_final_df = addIngestionDateColumn(constructors_renamed_df, 'ingestion_date'))
+constructors_final_df = addIngestionDateColumn(constructors_renamed_df, 'ingestion_date')
 
 # COMMAND ----------
 

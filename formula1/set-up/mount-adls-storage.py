@@ -26,6 +26,11 @@ def mount_dls(container_name):
 
 # COMMAND ----------
 
+def unmount_dls(container_name):
+    dbutils.fs.unmount(f"/mnt/{storage_name}/{container_name}")
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC #### Unmount raw container (if any)
 # MAGIC dbutils.fs.unmount('/mnt/formula1dl10/raw')
@@ -47,7 +52,7 @@ mount_dls("raw")
 # MAGIC %md
 # MAGIC #### Unmount processed container (if any)
 # MAGIC 
-# MAGIC dbutils.fs.unmount('/mnt/formula1dl10/processed')
+# MAGIC unmount_dls("raw")
 
 # COMMAND ----------
 

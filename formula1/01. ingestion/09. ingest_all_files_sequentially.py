@@ -1,6 +1,6 @@
 # Databricks notebook source
-dbutils.widgets.text('p_can_start', "false")
-v_can_start = dbutils.widgets.get('p_can_start')
+dbutils.widgets.text('can_start', "false")
+v_can_start = dbutils.widgets.get('can_start')
 
 if v_can_start == "false":
     dbutils.notebook.exit('can_start was False')

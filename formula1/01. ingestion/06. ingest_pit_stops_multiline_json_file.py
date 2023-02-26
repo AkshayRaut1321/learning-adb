@@ -44,7 +44,7 @@ pit_stops_renamed_df = pit_stops_df.withColumnRenamed('raceId', 'race_id') \
             .withColumnRenamed('driverId', 'driver_id') \
             .withColumn('data_source', lit(v_data_source))
 
-pit_stops_final_df = addIngestionDateColumn(pit_stops_renamed_df, 'ingestion_date'))
+pit_stops_final_df = addIngestionDateColumn(pit_stops_renamed_df, 'ingestion_date')
 
 # COMMAND ----------
 

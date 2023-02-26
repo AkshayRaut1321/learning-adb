@@ -64,9 +64,9 @@ from pyspark.sql.functions import to_timestamp, col, concat
 
 race_combined_time_df = race_selected_df.withColumn("race_timestamp", to_timestamp(concat(col("date"), lit(' '), col("time")), 'yyyy-MM-dd HH:mm:ss'))
 
-addIngestionDateColumn(race_combined_time_df, 'ingestion_date')).show()
+addIngestionDateColumn(race_combined_time_df, 'ingestion_date').show()
 
-race_final_df = addIngestionDateColumn(race_combined_time_df, 'ingestion_date')) \
+race_final_df = addIngestionDateColumn(race_combined_time_df, 'ingestion_date') \
     .select("race_id", "race_year", "round", "circuit_id", "name", "race_timestamp", "data_source", "ingestion_date")
 
 # COMMAND ----------

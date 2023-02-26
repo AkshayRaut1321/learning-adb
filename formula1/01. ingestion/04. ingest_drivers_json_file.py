@@ -71,7 +71,7 @@ drivers_renamed_df = drivers_concise_df.withColumn('name', concat(col('name.fore
                                     .withColumnRenamed('driverRef', 'driver_ref') \
                                     .withColumn('data_source', lit(v_data_source))
 
-drivers_final_df = addIngestionDateColumn(drivers_renamed_df, 'ingestion_date'))
+drivers_final_df = addIngestionDateColumn(drivers_renamed_df, 'ingestion_date')
 
 # COMMAND ----------
 

@@ -10,23 +10,23 @@ display(races_df)
 
 from pyspark.sql.functions import sum, count, when
 
-races_wins_grouped_df = races_df.groupBy('race_year', 'team', 'driver_nationality') \
+team_wins_grouped_df = races_df.groupBy('race_year', 'team') \
     .agg(sum('points').alias('total_points'), 
         count(when(races_df.position == 1, True)).alias('wins'));
 
-display(races_wins_grouped_df.filter('race_year = 2020'))
+display(team_wins_grouped_df.filter('race_year = 2020'))
 
 # COMMAND ----------
 
 from pyspark.sql.window import Window
-from pyspark.sql.functions import rank
+from pyspark.sql.functions import rank, desc
 
-driverRankByWins = Window.partitionBy('race_year').orderBy(desc('total_points'), desc('wins'));
+teamRankByWins = Window.partitionBy('race_year').orderBy(desc('total_points'), desc('wins'));
 
-driverStandingsDf = races_wins_grouped_df.withColumn('rank', rank().over(driverRankByWins));
+teamStandingsDf = team_wins_grouped_df.withColumn('rank', rank().over(teamRankByWins));
 
-display(driverStandingsDf);
+display(teamStandingsDf.filter("race_year = 2020"));
 
 # COMMAND ----------
 
-driverStandingsDf.write.mode('overwrite').parquet(f"{presentation_path}/driver_standings")
+teamStandingsDf.write.mode('overwrite').parquet(f"{presentation_path}/constructor_standings")

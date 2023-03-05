@@ -19,7 +19,7 @@ display(races_wins_grouped_df.filter('race_year = 2020'))
 # COMMAND ----------
 
 from pyspark.sql.window import Window
-from pyspark.sql.functions import rank
+from pyspark.sql.functions import rank, desc
 
 driverRankByWins = Window.partitionBy('race_year').orderBy(desc('total_points'), desc('wins'));
 

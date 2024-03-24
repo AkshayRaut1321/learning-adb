@@ -1,6 +1,9 @@
 # Databricks notebook source
-storage_name = "formula1dl10"
-scope = "formul1a-scope"
+# MAGIC %run "../includes/initialization"
+
+# COMMAND ----------
+
+scope = "formula1-scope"
 client_id = dbutils.secrets.get(scope = scope, key = "databricks-app-client-id")
 tenant_id = dbutils.secrets.get(scope = scope, key = "databricks-app-tenant-id")
 client_secret = dbutils.secrets.get(scope = scope, key = "databricks-app-client-secret")
@@ -20,6 +23,11 @@ def mount_dls(container_name):
                     mount_point = f"/mnt/{storage_name}/{container_name}",
                     extra_configs = configs)
 
+
+# COMMAND ----------
+
+def unmount_dls(container_name):
+    dbutils.fs.unmount(f"/mnt/{storage_name}/{container_name}")
 
 # COMMAND ----------
 
@@ -44,7 +52,7 @@ mount_dls("raw")
 # MAGIC %md
 # MAGIC #### Unmount processed container (if any)
 # MAGIC 
-# MAGIC dbutils.fs.unmount('/mnt/formula1dl10/processed')
+# MAGIC unmount_dls("raw")
 
 # COMMAND ----------
 
@@ -57,4 +65,8 @@ display(dbutils.fs.mounts())
 
 # COMMAND ----------
 
-display(dbutils.fs.ls('/mnt/formula1dl10/raw'))
+display(dbutils.fs.ls(f'/mnt/{storage_name}/raw'))
+
+# COMMAND ----------
+
+mount_dls("presentation")

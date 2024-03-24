@@ -46,7 +46,7 @@ qualifying_final_df = qualifying_df.withColumnRenamed('qualifyId', 'qualify_id')
     .withColumnRenamed('constructorId', 'constructor_id') \
     .withColumn('data_source', lit(v_data_source))
 
-addIngestionDateColumn(qualifying_final_df) \
+addIngestionDateColumn(qualifying_final_df, 'ingestion_date') \
     .write.mode('overwrite') \
     .parquet(destination_path + '/qualifying')
 

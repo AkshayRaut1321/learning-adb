@@ -68,7 +68,7 @@ results_renamed_df = results_concise_df.withColumnRenamed('resultId', 'result_id
         .withColumnRenamed('fastestLapSpeed', 'fastest_lap_speed') \
         .withColumn('data_source', lit(v_data_source))
 
-results_final = addIngestionDateColumn(results_renamed_df)
+results_final = addIngestionDateColumn(results_renamed_df, 'ingestion_date')
 
 # COMMAND ----------
 

@@ -1,0 +1,47 @@
+
+Akshay's Azure AD:
+Tenant ID - e3a291d3-8a20-4c35-8d08-38ffcafa479d
+
+Create an Azure storage account name: formula1dl08
+
+Enable hierarchical namespace
+
+create three containers
+raw
+processed
+presentation
+
+Azure AD - App registration:
+App name: databricks-course-app
+	App ID / client ID: fa68fc66-0cc1-40d8-865c-0be3ede7ae64
+
+	Go to Certificates and Secrets under the databricks-course-app
+	and create a new secret.
+
+	Copy the value of the newly created secret: Vvn8Q~Ys7C3.8jiFjG_pT9l24yqgot93hNP29bxQ
+
+Assign this app access to the storage account under Identity Access Management.
+
+Create a new Key Vault: databricks-KV-Akshay
+
+
+Key vault data:
+databricks-app-client-id: fa68fc66-0cc1-40d8-865c-0be3ede7ae64
+databricks-app-client-secret: Vvn8Q~Ys7C3.8jiFjG_pT9l24yqgot93hNP29bxQ
+databricks-app-tenant-id: 516ca49d-315a-440c-b7b0-0198f5b12503
+
+Github token for commits: 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
+
+In Azure Databricks, navigate to #secrets/createScope
+and create a new scope with name: formul1-scope
+In a Standard tier, you have to select All Users in Managed Principal.
+Provide DNS name from Azure Key vault's Vault UI from Properties tab: https://databricks-kv-akshay.vault.azure.net/
+
+Similarly, copy paste the Resource Id from same section: /subscriptions/2d1cf157-c5f9-45ba-a00a-02c5c888f741/resourceGroups/Databricks-course/providers/Microsoft.KeyVault/vaults/databricks-KV-Akshay
+
+
+Microsoft blogs:
+Refer Azure Architecture Center for designing
+
+Databricks blogs:
+How to accelerate your ETL pipelines from 18 hours to as fast as 5 minutes with Azure Databricks.

@@ -9,7 +9,7 @@
 
 spark.conf.set("fs.azure.account.auth.type.formula1dlakshayraut.dfs.core.windows.net", "SAS")
 spark.conf.set("fs.azure.sas.token.provider.type.formula1dlakshayraut.dfs.core.windows.net", "org.apache.hadoop.fs.azurebfs.sas.FixedSASTokenProvider")
-spark.conf.set("fs.azure.sas.fixed.token.formula1dlakshayraut.dfs.core.windows.net", "sv=2022-11-02&ss=b&srt=co&sp=rwlx&se=2024-08-12T00:39:14Z&st=2024-08-11T16:39:14Z&spr=https&sig=ZeTUmQbT5%2BXc5aOnFK15bKLxCA4yOL1R4IKFyn%2BhnAA%3D")
+spark.conf.set("fs.azure.sas.fixed.token.formula1dlakshayraut.dfs.core.windows.net", "<sas-token>")
 
 # COMMAND ----------
 

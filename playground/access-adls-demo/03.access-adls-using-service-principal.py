@@ -12,7 +12,7 @@
 
 client_id = "77af3c18-4fc5-403f-9698-0f009371a2cb";
 tenant_id = "516ca49d-315a-440c-b7b0-0198f5b12503";
-client_secret = "PBA8Q~KlRVvwE_8JPsKeWJONTgET~jX78ozVPbRU";
+client_secret = "<client-secret>";
 
 
 # COMMAND ----------

@@ -8,7 +8,7 @@
 # COMMAND ----------
 
 spark.conf.set("fs.azure.account.key.formula1dlakshayraut.dfs.core.windows.net",
-               "cWY7B3QEhpf1ObCULRmcWaiC8uoF3t3NGhlEnsx1jSVwl6hVQhNEtaglfn4jOMK7Mw2ynUGJQXsC+AStEDKnpg==")
+               "<storage-account-key>")
 
 # COMMAND ----------
 

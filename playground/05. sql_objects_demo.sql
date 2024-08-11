@@ -35,3 +35,11 @@ SHOW TABLES;
 -- COMMAND ----------
 
 SHOW TABLES in demo;
+
+-- COMMAND ----------
+
+USE demo;
+
+-- COMMAND ----------
+
+SHOW TABLES;

@@ -3,7 +3,7 @@
 
 # COMMAND ----------
 
-scope = "formula1-scope"
+scope = "formula2-scope"
 client_id = dbutils.secrets.get(scope = scope, key = "databricks-app-client-id")
 tenant_id = dbutils.secrets.get(scope = scope, key = "databricks-app-tenant-id")
 client_secret = dbutils.secrets.get(scope = scope, key = "databricks-app-client-secret")
@@ -43,7 +43,7 @@ mount_dls("raw")
 
 # MAGIC %md
 # MAGIC #### Check the mounted location
-# MAGIC 
+# MAGIC
 # MAGIC %fs
 # MAGIC ls dbfs:/mnt/formula1dl10/
 
@@ -51,7 +51,7 @@ mount_dls("raw")
 
 # MAGIC %md
 # MAGIC #### Unmount processed container (if any)
-# MAGIC 
+# MAGIC
 # MAGIC unmount_dls("raw")
 
 # COMMAND ----------

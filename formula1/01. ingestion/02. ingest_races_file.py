@@ -23,9 +23,7 @@ v_data_source = dbutils.widgets.get('p_data_source')
 
 # COMMAND ----------
 
-# MAGIC %fs
-# MAGIC 
-# MAGIC ls /mnt/formula1dlakshayraut/raw/
+# MAGIC %fs ls /mnt/formula1dlakshayraut/raw/
 
 # COMMAND ----------
 

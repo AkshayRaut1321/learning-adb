@@ -116,33 +116,33 @@ circuits_df.describe().show()
 
 # MAGIC %md
 # MAGIC #### 5.1) reading using literal string columns.
-# MAGIC 
+# MAGIC
 # MAGIC ##### Test selecting specific columns
 # MAGIC E.g. 1) circuits_df.select("*", "circuitsId").show()
-# MAGIC 
+# MAGIC
 # MAGIC E.g. 2) circuits_df.select("circuitsId", "circuitRef", "name", "location", "country", "lat", "lng", "alt").show()
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC #### 5.2) reading using each column as a property of the DataFrame object.
-# MAGIC 
+# MAGIC
 # MAGIC circuits_df.select(circuits_df.circuitsId, circuits_df.circuitRef, circuits_df.name, circuits_df.location, circuits_df.country, circuits_df.lat, circuits_df.lng, circuits_df.alt).show()
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC #### 5.3) reading using each column as a key value property of the DataFrame object.
-# MAGIC 
+# MAGIC
 # MAGIC circuits_df.select(circuits_df["circuitsId"], circuits_df["circuitRef"], circuits_df["name"], circuits_df["location"], circuits_df["country"], circuits_df["lat"], circuits_df["lng"], circuits_df["alt"]).show()
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC #### 5.4) reading by importing and using col function that gives us a rename/alias functionality.
-# MAGIC 
+# MAGIC
 # MAGIC from pyspark.sql.functions import col
-# MAGIC 
+# MAGIC
 # MAGIC circuits_df.select(col("circuitsId").alias("circuits_id"), col("circuitRef"), col("name"), col("location"), col("country"), col("lat"), col("lng"), col("alt")).show()
 
 # COMMAND ----------
@@ -154,7 +154,7 @@ circuits_selected_df = circuits_df.select(col("circuitsId"), col("circuitRef"), 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC 
+# MAGIC
 # MAGIC #### 5.5) reading by using withColumnRenamed function of the DataFrame object.
 
 # COMMAND ----------
@@ -175,7 +175,7 @@ circuits_renamed_df = circuits_selected_df.withColumnRenamed("circuitsId", "circ
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC 
+# MAGIC
 # MAGIC #### Step 9 - Verify that columns are renamed in the output.
 
 # COMMAND ----------
@@ -191,18 +191,18 @@ circuits_renamed_df.show()
 
 # MAGIC %md
 # MAGIC ##### 10.1) - Add new column by passing a readymade function that returns a column object with.
-# MAGIC 
+# MAGIC
 # MAGIC from pyspark.sql.functions import current_timestamp
-# MAGIC 
+# MAGIC
 # MAGIC circuits_renamed_df.withColumn("ingestion_date", current_timestamp()).show()
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC ##### 10.2) - Add new column by passing a literal value to a function that returns a column object.
-# MAGIC 
+# MAGIC
 # MAGIC from pyspark.sql.functions import lit
-# MAGIC 
+# MAGIC
 # MAGIC circuits_selected_df.withColumn("env", lit("Development")).show()
 
 # COMMAND ----------
@@ -219,7 +219,7 @@ display(circuits_final_df)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC 
+# MAGIC
 # MAGIC ### 2 - Writing to a Parquet file using DataFrame Writer API
 
 # COMMAND ----------
@@ -228,9 +228,7 @@ circuits_final_df.write.mode("overwrite").parquet(f'{destination_path}/circuits'
 
 # COMMAND ----------
 
-# MAGIC %fs
-# MAGIC 
-# MAGIC ls /mnt/formula1dlakshayraut/processed/
+# MAGIC %fs ls /mnt/formula1dlakshayraut/processed/
 
 # COMMAND ----------
 

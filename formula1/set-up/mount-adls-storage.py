@@ -3,7 +3,7 @@
 
 # COMMAND ----------
 
-scope = "formula2-scope"
+scope = "formula1-scope"
 client_id = dbutils.secrets.get(scope = scope, key = "databricks-app-client-id")
 tenant_id = dbutils.secrets.get(scope = scope, key = "databricks-app-tenant-id")
 client_secret = dbutils.secrets.get(scope = scope, key = "databricks-app-client-secret")

@@ -1,6 +1,6 @@
 # Databricks notebook source
 # MAGIC %md
-# MAGIC #### Access Azure Data Lake using Service Principal
+# MAGIC #### Access Azure Data Lake using Service Principal using spark config
 # MAGIC
 # MAGIC ##### Steps to follow
 # MAGIC 1. Register Azure AD application or service principal
@@ -35,6 +35,3 @@ display(dbutils.fs.ls("abfss://demo@formula1dlakshayraut.dfs.core.windows.net"))
 
 circuitsDF = spark.read.csv("abfss://demo@formula1dlakshayraut.dfs.core.windows.net/circuits.csv")
 display(circuitsDF)
-
-# COMMAND ----------
-

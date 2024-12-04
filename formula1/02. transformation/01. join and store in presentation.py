@@ -56,6 +56,4 @@ final_df.write.mode('overwrite').parquet(f'{presentation_path}/race_results')
 
 # COMMAND ----------
 
-# MAGIC %fs
-# MAGIC 
-# MAGIC ls /mnt/formula1dlakshayraut/presentation/
+# MAGIC %fs ls /mnt/formula1dlakshayraut/presentation/

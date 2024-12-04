@@ -1,0 +1,74 @@
+{
+  "job_id": 570202276254387,
+  "creator_user_name": "rakshay08@gmail.com",
+  "run_as_user_name": "rakshay08@gmail.com",
+  "run_as_owner": true,
+  "settings": {
+    "name": "New Job 2024-12-04 15:27:30",
+    "email_notifications": {
+      "no_alert_for_skipped_runs": false
+    },
+    "webhook_notifications": {},
+    "timeout_seconds": 0,
+    "max_concurrent_runs": 1,
+    "tasks": [
+      {
+        "task_key": "setup_mount_storage",
+        "run_if": "ALL_SUCCESS",
+        "notebook_task": {
+          "notebook_path": "/Workspace/Users/rakshay08@gmail.com/learning-adb/formula1/set-up/mount-adls-storage",
+          "source": "WORKSPACE"
+        },
+        "existing_cluster_id": "1204-101522-pukdlp39",
+        "timeout_seconds": 0,
+        "email_notifications": {},
+        "webhook_notifications": {}
+      },
+      {
+        "task_key": "ingest_all_files_sequentially",
+        "depends_on": [
+          {
+            "task_key": "setup_mount_storage"
+          }
+        ],
+        "run_if": "ALL_SUCCESS",
+        "notebook_task": {
+          "notebook_path": "/Workspace/Users/rakshay08@gmail.com/learning-adb/formula1/01. ingestion/09. ingest_all_files_sequentially",
+          "base_parameters": {
+            "can_start": "true"
+          },
+          "source": "WORKSPACE"
+        },
+        "existing_cluster_id": "1204-101522-pukdlp39",
+        "timeout_seconds": 0,
+        "email_notifications": {},
+        "webhook_notifications": {}
+      },
+      {
+        "task_key": "transform_all_files_sequentially",
+        "depends_on": [
+          {
+            "task_key": "ingest_all_files_sequentially"
+          }
+        ],
+        "run_if": "ALL_SUCCESS",
+        "notebook_task": {
+          "notebook_path": "/Workspace/Users/rakshay08@gmail.com/learning-adb/formula1/02. transformation/04. transform_all_files_sequentially",
+          "base_parameters": {
+            "can_start": "true"
+          },
+          "source": "WORKSPACE"
+        },
+        "existing_cluster_id": "1204-101522-pukdlp39",
+        "timeout_seconds": 0,
+        "email_notifications": {},
+        "webhook_notifications": {}
+      }
+    ],
+    "format": "MULTI_TASK",
+    "queue": {
+      "enabled": true
+    }
+  },
+  "created_time": 1733306250661
+}

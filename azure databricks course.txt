@@ -11,27 +11,29 @@ Enable Hierchical namespace.
 
 4) Azure AD - App registration:
 App name: databricks-course-app
-	Get new App ID / client ID: d636de80-fead-40c2-a704-d6d32d05197f
+	Get new App ID / client ID: 4b229fbb-4f38-4728-9ab2-19b026e6ddbb
 
 	Go to Certificates and Secrets under the databricks-course-app
 	and create a new secret.
 
-	Copy the value of the newly created secret: 
-	Secret ID - 89708198-8f20-453c-be2d-17c6387ace97
+	Copy the value of the newly created secret: "Hu98Q~scdlI.dwq5HaqsQE1PpAncX7DJORDp6bNU"
 	
 Go to the storage account and Access Control (IAM)
 Give the above app access to this storage account under Identity Access Management.
 Click on Add Role Assignment.
-Select "Storage Blob Data Contributor".
+Select "Storage Blob Data Contributor" or Owner.
 Next, select "User, group, service principal." and click "Select Members".
 Select "databricks-course-app".
 
-Create a new Key Vault: databricks-KV-Akshay2
+Create a new Key Vault: databricks-KV-Akshay1
+Go to Access Control (IAM).
+	Add yourself as Key Vault Administrator. - Mandatory to add secrets.
+	Add "AzureDatabricks" as Key Vault Administrator of Key Vault.
 
-Key vault data:
-databricks-app-client-id: the App ID/ Client ID of the newly registered App.
-databricks-app-client-secret: Secret from app registration
-databricks-app-tenant-id: Tenant ID
+	Key vault data:
+	databricks-app-client-id: the App ID/ Client ID of the newly registered App.
+	databricks-app-client-secret: Secret from app registration
+	databricks-app-tenant-id: Tenant ID
 
 Github token for commits: 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
 
@@ -39,10 +41,10 @@ Create new Azure Databricks workspace: AzureDatabricksWS
 
 In Azure Databricks, navigate to #secrets/createScope
 and create a new scope with name: formula1-scope
-In a Standard tier, you have to select All Users in Managed Principal.
+In a Standard tier, you have to select "All Users" in Managed Principal.
 Provide DNS name from Azure Key vault's Vault URI from Properties tab on the left: https://databricks-kv-akshay1.vault.azure.net/
 
-Similarly, copy paste the Resource Id from same section: /subscriptions/2d1cf157-c5f9-45ba-a00a-02c5c888f741/resourceGroups/AzureDatabricksRG/providers/Microsoft.KeyVault/vaults/databricks-KV-Akshay2
+Similarly, copy paste the Resource Id from same section: /subscriptions/2d1cf157-c5f9-45ba-a00a-02c5c888f741/resourceGroups/AzureDatabricksRG/providers/Microsoft.KeyVault/vaults/databricks-KV-Akshay1
 
 
 Microsoft blogs:
